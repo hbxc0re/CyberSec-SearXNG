@@ -1,0 +1,18 @@
+{
+auto_https disable_redirects
+}
+http://, https:// {
+tls internal {
+on_demand
+}
+}
+}
+header {
+-Server
+Strict-Transport-Security "max-age=31536000;"
+X-XSS-Protection "0"
+X-Frame-Options "DENY"
+reverse_proxy 172.30.0.12:8080 {
+header_up X-Forwarded-For {remote_host}
+header_up X-Real-IP {remote_host}
+}

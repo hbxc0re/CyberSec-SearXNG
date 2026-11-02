@@ -1,0 +1,79 @@
+use_default_settings: true
+
+server:
+  bind_address: "0.0.0.0"
+  port: 8080
+  secret_key: "REPLACE_WITH_SECRET"
+  limiter: false
+  image_proxy: true
+  method: "POST"
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+    - csv
+    - rss
+
+outgoing:
+  request_timeout: 15.0
+  max_request_timeout: 30.0
+  useragent_suffix: ""
+  proxies:
+    all://:
+      - socks5h://172.30.0.10:9050
+  using_tor_proxy: true
+
+valkey:
+  url: valkey://172.30.0.11:6379/0
+
+engines:
+  - name: nvd
+    engine: xpath
+    shortcut: cve
+    categories: [security]
+    search_url: "https://nvd.nist.gov/vuln/search/results?form_type=Basic&results_type=overview&query={query}"
+    url_xpath: '//table[@data-testid="vuln-results-table"]//a[starts-with(@data-testid, "vuln-detail-link-")]/@href'
+    title_xpath: '//table[@data-testid="vuln-results-table"]//a[starts-with(@data-testid, "vuln-detail-link-")]'
+    content_xpath: '//table[@data-testid="vuln-results-table"]//p[starts-with(@data-testid, "vuln-summary-")]'
+    disabled: false
+    timeout: 15.0
+    proxy: false
+
+  - name: crtsh
+    engine: json_engine
+    shortcut: crt
+    categories: [osint, security]
+    search_url: "https://crt.sh/?q={query}&output=json"
+    url_prefix: "https://crt.sh/?id="
+    results_query: ""
+    url_query: "id"
+    title_query: "common_name"
+    content_query: "name_value"
+    disabled: false
+    timeout: 15.0
+    proxy: false
+
+  - name: exploit-db
+    engine: github
+    shortcut: edb
+    categories: [security]
+    search_url: "https://github.com/offensive-security/exploitdb/search?q={query}"
+    disabled: false
+    timeout: 12.0
+
+  - name: gtfobins
+    engine: duckduckgo
+    shortcut: gtfo
+    categories: [security, it]
+    search_url: "https://html.duckduckgo.com/html/?q=site:gtfobins.github.io+{query}"
+    disabled: false
+
+  - name: hacktricks
+    engine: duckduckgo
+    shortcut: ht
+    categories: [security]
+    search_url: "https://html.duckduckgo.com/html/?q=site:book.hacktricks.xyz+{query}"
+    disabled: false
