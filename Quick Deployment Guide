@@ -1,0 +1,40 @@
+--------------------------------------------------------------------------------------------------------------------------------------
+Step 1: Clone or Create Project Directory
+
+sudo mkdir -p /opt/secxng/searxng
+sudo chown -R $USER:$USER /opt/secxng
+cd /opt/secxng
+--------------------------------------------------------------------------------------------------------------------------------------
+Step 2: Place Configuration Files
+Upload or create docker-compose.yml, Caddyfile, and searxng/settings.yml inside /opt/secxng/
+--------------------------------------------------------------------------------------------------------------------------------------
+Step 3: Initialize, Secure Permissions, and Launch
+Run the following commands in your server terminal to generate a secure 32-byte cryptographic secret key, 
+set proper UID 977 container permissions, and start the stack:
+
+sed -i "s/REPLACE_WITH_SECRET/$(openssl rand -hex 32)/g" /opt/secxng/searxng/settings.yml
+sudo chown -R 977:977 /opt/secxng/searxng
+docker compose down && docker compose up -d
+--------------------------------------------------------------------------------------------------------------------------------------
+Step 4: Verify Container Health
+
+docker compose ps
+
+All four containers (secxng-core, secxng-valkey, secxng-tor, secxng-caddy) should report status Up.
+--------------------------------------------------------------------------------------------------------------------------------------
+Custom Bangs Reference Table
+
+Shortcut	Engine Name	Category	Description & Example Query
+!cve	NIST NVD	security	!cve openssh — NIST vulnerability intelligence (Direct route)
+!crt	crt.sh OSINT	osint	!crt ubuntu.com — Certificate transparency subdomain enumeration
+!edb	Exploit-DB	security	!edb vsftpd — GitHub-indexed exploit payload lookup
+!gtfo	GTFOBins	security	!gtfo find — Unix binary privilege escalation methods
+!ht	HackTricks	security	!ht kerberoasting — Pentesting methodology cheat sheets
+--------------------------------------------------------------------------------------------------------------------------------------
+ API Automation Example
+
+With JSON output formatting enabled, you can query your appliance directly from scripts or local LLM agents:
+
+curl -s '[http://127.0.0.1:8080/search?q=!crt+ubuntu.com&format=json](http://127.0.0.1:8080/search?q=!crt+ubuntu.com&format=json)' | jq '.results[0:3]'
+
+--------------------------------------------------------------------------------------------------------------------------------------
