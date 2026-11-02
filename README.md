@@ -7,23 +7,8 @@ A production-ready, self-hosted metasearch appliance optimized for cybersecurity
 
 ## 🏗️ Architecture Overview
 
-+-------------------------------------------------------+
-| Ubuntu Server 24.04 LTS (Host Firewall: UFW Locked)   |
-|                                                       |
-|  +-------------------------------------------------+  |
-|  | Caddy Reverse Proxy (Ports 80 / 443)            |  |
-|  +------------------------+------------------------+  |
-|                           | (Internal Bridge)         |
-|  +------------------------v------------------------+  |
-|  | SearXNG Core Appliance (Port 8080 - Loopback)   |  |
-|  +------+-------------------+-------------------+--+  |
-|         |                   |                   |     |
-|  +------v------+     +------v------+     +------v---+ |
-|  | Valkey Cache|     | Alpine Tor  |     | Direct   | |
-|  | (In-Memory) |     | SOCKS5 Proxy|     | WAN APIs | |
-|  +-------------+     +-------------+     +----------+ |
-|                         (Anonymized)       (Bypasses) |
-+-------------------------------------------------------+
+<img width="565" height="454" alt="Screen Shot 2026-11-02 at 6 11 59 PM" src="https://github.com/user-attachments/assets/bb6eb3ad-b32c-485c-ab52-9c93c5e3cd06" />
+
 
 
 ---
